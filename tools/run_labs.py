@@ -37,6 +37,11 @@ def run(path: Path, execute: bool = True) -> bool:
         for c in nb.cells:
             if c.cell_type == "code":
                 c.outputs, c.execution_count = [], None
+    # keep the stored notebook identical from run to run: no run timestamps, fixed cell ids, no Python patch version
+    for i, c in enumerate(nb.cells):
+        c.metadata.pop("execution", None)
+        c["id"] = f"cell-{i:03d}"
+    nb.metadata.get("language_info", {}).pop("version", None)
     nbformat.write(nb, out)
     return True
 
