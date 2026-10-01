@@ -1,0 +1,11 @@
+{
+  "acc_att": 1.0,
+  "acc_bow": 0.839,
+  "att_phishing_to_not": 0.9809167520482918,
+  "examples": {
+    "invoice not phishing": 2.1700447664472253e-06,
+    "lunch and malware": 1.0,
+    "phishing not invoice": 0.9999976633077289
+  },
+  "final_loss": 1.4731480761074066e-06
+}

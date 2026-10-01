@@ -1,0 +1,71 @@
+{
+  "knn": {
+    "auc": 0.6783660579013535,
+    "brier": 0.06741826875000001,
+    "ece": 0.01463124999999965,
+    "log_loss": 0.2568857917487153
+  },
+  "lr": {
+    "auc": 0.8883198005723515,
+    "brier": 0.04828789295377491,
+    "ece": 0.007685524308047237,
+    "log_loss": 0.17477893388105656
+  },
+  "n_notes": 30000,
+  "near_download": [
+    [
+      "leak",
+      0.85
+    ],
+    [
+      "exfiltration",
+      0.85
+    ],
+    [
+      "upload",
+      0.85
+    ],
+    [
+      "copy",
+      0.85
+    ]
+  ],
+  "near_phishing": [
+    [
+      "lookalike",
+      1.0
+    ],
+    [
+      "spoofed",
+      1.0
+    ],
+    [
+      "impersonation",
+      1.0
+    ],
+    [
+      "fake",
+      1.0
+    ]
+  ],
+  "near_upload": [
+    [
+      "exfiltration",
+      1.0
+    ],
+    [
+      "leak",
+      1.0
+    ],
+    [
+      "copy",
+      0.98
+    ],
+    [
+      "download",
+      0.85
+    ]
+  ],
+  "query_desc": "Access key owned by omar.okafor (employee) used from a network never seen before (91.127.97.171) at 2026-09-10 10:33. Threat intel score: 0.84. 2 related alerts in the last 24h. MFA not completed.",
+  "query_mal": 1
+}

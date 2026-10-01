@@ -1,0 +1,19 @@
+name: live-api-drift
+# Weekly: if a real TypeSafe key is configured, check that the real API still has the shape the book teaches.
+on:
+  schedule: [{ cron: "17 6 * * 1" }]
+  workflow_dispatch:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    env:
+      TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+      JEVKIT_LIVE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements.txt && pip install -e .
+      - name: Shape checks against the real API (skipped without a key)
+        run: pytest -q tests/live

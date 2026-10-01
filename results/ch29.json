@@ -1,0 +1,9 @@
+{
+  "ch24_speedup": 4.316278631605333,
+  "task_decisions": 8,
+  "task_jev_cost": 0.001568,
+  "task_jev_s": 8.45,
+  "task_llm_cost": 0.00668,
+  "task_llm_s": 13.383333333333336,
+  "task_steps": 14
+}

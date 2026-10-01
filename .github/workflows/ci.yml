@@ -1,0 +1,25 @@
+name: checks
+# Every push: unit tests, every lab run end to end against the mock, and every figure redrawn.
+on:
+  push:
+  pull_request:
+
+jobs:
+  labs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install
+        run: |
+          pip install -r requirements.txt
+          pip install -e .
+      - name: Unit tests
+        run: pytest -q
+      - name: Run every lab in mock mode
+        run: python tools/run_labs.py
+      - name: Notebooks match their .py sources
+        run: git diff --exit-code -- labs/
+      - name: Redraw every figure
+        run: python tools/build_figures.py all

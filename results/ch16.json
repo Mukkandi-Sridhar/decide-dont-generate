@@ -1,0 +1,13 @@
+{
+  "doom_cost_per_decision": 0.00019444444444444443,
+  "doom_decisions_per_hour": 36000,
+  "doom_implied_tokens": 4629.629629629629,
+  "jev_cost_per_decision": 2.1e-05,
+  "jev_cost_per_million": 21.0,
+  "llm_cost_per_decision": 0.00066,
+  "llm_cost_per_million": 660.0,
+  "llm_price_in": 1.0,
+  "llm_price_out": 4.0,
+  "ratio": 31.42857142857143,
+  "tokens_in": 500
+}

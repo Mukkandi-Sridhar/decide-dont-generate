@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+.cache/
+.venv/
+venv/
+build/
+dist/
+# figures are drawn by tools/build_figures.py; the outputs aren't kept in the repository
+figures/*/
+!figures/src/
+# logs and cassettes written by the labs
+*.jsonl
+.DS_Store

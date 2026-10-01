@@ -1,0 +1,19 @@
+{
+  "forced_conf_mean": 0.8265467500000001,
+  "forced_conf_median": 0.9512,
+  "forced_threat_share": 1.0,
+  "full_benign_share": 0.96,
+  "n_harmless": 400,
+  "sev_example": {
+    "expected": 1.0452,
+    "id": 118,
+    "p_attack": 0.4362,
+    "p_high": 0.3689,
+    "probs": [
+      0.4624,
+      0.1687,
+      0.2302,
+      0.1387
+    ]
+  }
+}

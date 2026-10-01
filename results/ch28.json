@@ -1,0 +1,73 @@
+{
+  "campaign_first_flag": 1,
+  "campaign_flag_days": 7,
+  "campaign_flags_day1": [
+    "review queue 269 over capacity 240",
+    "seen alerts: predicted 16.0% real, observed 27.2%"
+  ],
+  "example": {
+    "alert_id": "KL-B307E0F5",
+    "audit": false,
+    "config_fingerprint": "c8b13af993",
+    "config_version": "triage-2026.10.2",
+    "decision_id": "559edd952158",
+    "kind": "benign",
+    "latency_ms": 0.99,
+    "model": "jev-mock-synthetic",
+    "p_calibrated": 0.0023454475006449865,
+    "p_raw": 0.0008,
+    "reason": "P=0.002 against lines 0.039/0.34",
+    "request_id": "req_mock_13999c3693a4ac37",
+    "severity": 0.2017,
+    "zone": "act"
+  },
+  "fallback_act_closed": 12,
+  "fallback_rate": 0.096,
+  "fallback_threats": 12,
+  "high": 0.34,
+  "live_flag_days_v2": 0,
+  "shadow_act_to_review": 0,
+  "shadow_agree": 0.9590212850606724,
+  "shadow_matrix": [
+    [
+      2797,
+      0,
+      0
+    ],
+    [
+      206,
+      1718,
+      0
+    ],
+    [
+      0,
+      0,
+      306
+    ]
+  ],
+  "shadow_moved_threats_day": 1.1428571428571428,
+  "shadow_review_to_act_day": 29.428571428571427,
+  "v1_low": 0.03134068683221891,
+  "v1_mean_reviews": 274.85714285714283,
+  "v1_reviews": [
+    261,
+    282,
+    279,
+    280,
+    261,
+    278,
+    283
+  ],
+  "v2_fingerprint": "c8b13af993",
+  "v2_low": 0.03927099064646217,
+  "v2_mean_reviews": 245.42857142857142,
+  "v2_reviews": [
+    235,
+    252,
+    249,
+    247,
+    232,
+    253,
+    250
+  ]
+}

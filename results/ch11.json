@@ -1,0 +1,47 @@
+{
+  "distinct_stated": [
+    0.7,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    0.99
+  ],
+  "jev_text": {
+    "auc": 0.8453804454887015,
+    "brier": 0.05693633862749999,
+    "ece": 0.02986317500000001,
+    "log_loss": 0.20729541132462334
+  },
+  "n": 4000,
+  "n_distinct_stated": 6,
+  "outcomes": {
+    "JSON mode": {
+      "broken JSON": 0,
+      "valid, extra field": 66,
+      "valid, right shape": 3934,
+      "wrapped in chat text": 0
+    },
+    "prompt only": {
+      "broken JSON": 52,
+      "valid, extra field": 66,
+      "valid, right shape": 3811,
+      "wrapped in chat text": 71
+    }
+  },
+  "prompt_fail_per_day": 33.075,
+  "prompt_fail_share": 0.04725,
+  "share_stated_ge_09": 0.983,
+  "token": {
+    "auc": 0.8379963753451839,
+    "brier": 0.06306038460094261,
+    "ece": 0.052858842737870435,
+    "log_loss": 0.3266301441282301
+  },
+  "verbal": {
+    "auc": 0.6581009423386187,
+    "brier": 0.070536625,
+    "ece": 0.02402250000000018,
+    "log_loss": 0.28345642295080514
+  }
+}

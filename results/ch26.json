@@ -1,0 +1,49 @@
+{
+  "acc60": 0.8545454545454545,
+  "account_as_technical": 15,
+  "confusion": {
+    "account": {
+      "account": 48,
+      "billing": 0,
+      "other": 26,
+      "technical": 15
+    },
+    "billing": {
+      "account": 0,
+      "billing": 106,
+      "other": 0,
+      "technical": 0
+    },
+    "other": {
+      "account": 0,
+      "billing": 17,
+      "other": 82,
+      "technical": 0
+    },
+    "technical": {
+      "account": 0,
+      "billing": 0,
+      "other": 47,
+      "technical": 59
+    }
+  },
+  "cov60": 0.55,
+  "lines": {
+    "Clinical intake": 0.0029910269192422734,
+    "Code review gate": 0.014778325123152709,
+    "Content moderation": 0.038461538461538464,
+    "Insurance claims": 0.014778325123152709,
+    "Payment fraud": 0.03225806451612903,
+    "Support tickets": 0.047619047619047616
+  },
+  "n_tickets": 400,
+  "per_topic": {
+    "account": 0.5393258426966292,
+    "billing": 1.0,
+    "other": 0.8282828282828283,
+    "technical": 0.5566037735849056
+  },
+  "topic_acc": 0.7375,
+  "urgent_auc": 0.5917857142857142,
+  "urgent_ece": 0.16150650000000003
+}

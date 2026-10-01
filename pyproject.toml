@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jevkit"
+version = "1.0.0"
+description = "Companion toolkit for the book 'Decide, Don't Generate': a free local mock of the Jev API, synthetic security alerts, and calibration, policy and agent tools."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Sridhar Mukkandi"}]
+keywords = ["ai-agents", "calibration", "decision-making", "machine-learning", "llm"]
+dependencies = [
+  "typesafe-sdk==0.7.2",
+  "numpy>=1.26",
+  "pandas>=2.0",
+  "scipy>=1.11",
+  "scikit-learn>=1.3",
+  "autograd>=1.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/Mukkandi-Sridhar/decide-dont-generate"
+Tools = "https://mukkandi-sridhar.github.io/decide-dont-generate/"
+Issues = "https://github.com/Mukkandi-Sridhar/decide-dont-generate/issues"
+
+[project.optional-dependencies]
+figs = ["matplotlib>=3.8"]
+dev = ["pytest>=8", "jupytext>=1.16", "nbclient>=0.10", "nbformat>=5.9", "ipykernel>=6", "jupyter"]
+
+[tool.setuptools.packages.find]
+include = ["jevkit*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

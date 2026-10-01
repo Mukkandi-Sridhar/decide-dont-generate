@@ -1,0 +1,16 @@
+# The toolkit (same as `pip install -e .`)
+typesafe-sdk==0.7.2
+numpy>=1.26
+pandas>=2.0
+scipy>=1.11
+scikit-learn>=1.3
+autograd>=1.7
+# Figures
+matplotlib>=3.8
+# Running and testing the labs
+jupyter
+pytest>=8
+jupytext>=1.16
+nbclient>=0.10
+nbformat>=5.9
+ipykernel>=6

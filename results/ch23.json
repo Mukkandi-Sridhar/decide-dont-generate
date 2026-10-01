@@ -1,0 +1,74 @@
+{
+  "cost_four_one": 7.534905,
+  "cost_four_sep": 14.4203325,
+  "cost_json": 3.182235,
+  "cost_text": 3.0929325000000003,
+  "errors": [
+    [
+      "no API key at all",
+      "\u2013",
+      "TypeSafeError"
+    ],
+    [
+      "model name that doesn\u2019t exist",
+      "404",
+      "TypeSafeNotFoundError"
+    ],
+    [
+      "a choice with no options",
+      "422",
+      "TypeSafeUnprocessableEntityError"
+    ],
+    [
+      "a score with no levels",
+      "\u2013",
+      "TypeSafeError"
+    ],
+    [
+      "rate limited, no retries",
+      "429",
+      "TypeSafeRateLimitError"
+    ],
+    [
+      "rate limited once, default retries",
+      "429",
+      "succeeds"
+    ],
+    [
+      "server error, no retries",
+      "503",
+      "TypeSafeInternalServerError"
+    ],
+    [
+      "server error once, default retries",
+      "503",
+      "succeeds"
+    ],
+    [
+      "network down",
+      "\u2013",
+      "TypeSafeAPIConnectionError"
+    ]
+  ],
+  "ok_05_2": 0.9983333333333333,
+  "ok_20_0": 0.7933333333333333,
+  "ok_20_2": 0.9916666666666667,
+  "retry": {
+    "0.01_0": 0.99,
+    "0.01_1": 1.0,
+    "0.01_2": 1.0,
+    "0.01_3": 1.0,
+    "0.05_0": 0.9533333333333334,
+    "0.05_1": 0.9983333333333333,
+    "0.05_2": 0.9983333333333333,
+    "0.05_3": 1.0,
+    "0.2_0": 0.7933333333333333,
+    "0.2_1": 0.9616666666666667,
+    "0.2_2": 0.9916666666666667,
+    "0.2_3": 0.9983333333333333
+  },
+  "tokens_four_one": 179.4025,
+  "tokens_four_sep": 343.34125,
+  "tokens_json": 75.7675,
+  "tokens_text": 73.64125
+}

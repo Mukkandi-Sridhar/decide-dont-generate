@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threshold Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<nav><a href="index.html">Companion widgets</a> · Chapter 14</nav>
+<div class="kicker">Act, review or escalate</div>
+<h1>Threshold simulator</h1>
+<span class="tag">Synthetic: Kestrel's live week, jev-mock-synthetic probabilities after Platt scaling</span>
+<p>Set what mistakes cost at Kestrel. The thresholds come from the Chapter 14 formulas; the counts come from running those thresholds over the 5,027 alerts of the live week.</p>
+
+<div class="card controls ui">
+  <label>Missed real threat: <b id="missV"></b><input id="miss" type="range" min="1000" max="50000" step="500" value="10000"></label>
+  <label>Review by an analyst: <b id="revV"></b><input id="rev" type="range" min="5" max="60" step="1" value="15"></label>
+  <label>Share of threats a reviewer misses: <b id="mrV"></b><input id="mr" type="range" min="0" max="0.2" step="0.01" value="0.05"></label>
+  <label>False page to on-call: <b id="pageV"></b><input id="page" type="range" min="50" max="2000" step="50" value="400"></label>
+  <label>Reviews the team can clear per day: <b id="capV"></b><input id="cap" type="range" min="60" max="800" step="20" value="240"></label>
+  <label><input id="fit" type="checkbox" checked> Raise the low threshold until the queue fits</label>
+</div>
+
+<div class="card">
+  <svg id="bar" viewBox="0 0 800 90" role="img" aria-label="The three zones on a probability scale"></svg>
+  <div class="stats" id="stats"></div>
+  <p class="note" id="msg"></p>
+</div>
+<p class="note">Formulas: low = review ÷ (miss × (1 − reviewer miss rate)); high = (page − review) ÷ (page + reviewer miss rate × miss). These assume the probabilities are calibrated, which is why the book tests them first (Chapter 11).</p>
+</main>
+<script src="data.js"></script>
+<script>
+const D = window.BOOK_DATA.live, $ = id => document.getElementById(id);
+const P = D.p, Y = D.y, days = D.days;
+const sorted = P.map((p, i) => [p, Y[i]]).sort((a, b) => a[0] - b[0]);
+const money = v => "$" + Math.round(v).toLocaleString();
+function counts(low, high) {
+  let act = 0, rev = 0, esc = 0, missed = 0, revThreat = 0, escThreat = 0;
+  for (let i = 0; i < P.length; i++) {
+    if (P[i] < low) { act++; missed += Y[i]; } else if (P[i] < high) { rev++; revThreat += Y[i]; } else { esc++; escThreat += Y[i]; }
+  }
+  return {act, rev, esc, missed, revThreat, escThreat};
+}
+function draw(low, high) {
+  const x = p => 20 + 760 * Math.sqrt(p);                       // square-root scale so thresholds near 0 are visible
+  const z = [[0, low, "var(--act)", "ACT"], [low, high, "var(--review)", "REVIEW"], [high, 1, "var(--escalate)", "ESCALATE"]];
+  let s = "";
+  for (const [a, b, c, t] of z) {
+    s += `<rect x="${x(a)}" y="10" width="${Math.max(0, x(b) - x(a))}" height="36" fill="${c}" rx="3"></rect>`;
+    if (x(b) - x(a) > 60) s += `<text x="${(x(a) + x(b)) / 2}" y="33" text-anchor="middle" style="fill:${t === "ACT" ? "var(--ink)" : "#fff"};font-weight:700">${t}</text>`;
+  }
+  for (const v of [0, 0.01, 0.05, 0.1, 0.25, 0.5, 1]) s += `<text x="${x(v)}" y="64" text-anchor="middle">${v}</text>`;
+  s += `<text x="${x(low)}" y="84" text-anchor="middle" style="fill:var(--ink);font-weight:600">low ${low.toFixed(3)}</text>`;
+  s += `<text x="${Math.min(760, x(high))}" y="84" text-anchor="middle" style="fill:var(--ink);font-weight:600">high ${high.toFixed(2)}</text>`;
+  $("bar").innerHTML = s;
+}
+function update() {
+  const miss = +$("miss").value, rev = +$("rev").value, mr = +$("mr").value, page = +$("page").value, cap = +$("cap").value;
+  $("missV").textContent = money(miss); $("revV").textContent = money(rev); $("mrV").textContent = Math.round(mr * 100) + "%";
+  $("pageV").textContent = money(page); $("capV").textContent = cap;
+  let low = rev / (miss * (1 - mr)), high = Math.max(low, (page - rev) / (page + mr * miss));
+  let c = counts(low, high), note = "Thresholds from costs alone.";
+  if ($("fit").checked && c.rev / days > cap + 0.5) {
+    const nHigh = sorted.findIndex(r => r[0] >= high), budget = Math.floor(cap * days);
+    const k = (nHigh < 0 ? sorted.length : nHigh) - budget;
+    if (k > 0) { low = sorted[k][0]; c = counts(low, high); }
+    note = "The low threshold was raised so the review queue fits the team. Every alert moved from review to auto-close is a cost you chose.";
+  }
+  draw(low, high);
+  const cost = (c.missed * miss + c.rev * rev + c.revThreat * mr * miss + (c.esc - c.escThreat) * page) / days;
+  const stats = [["auto-closed per day", (c.act / days).toFixed(0)], ["reviews per day", (c.rev / days).toFixed(0)],
+                 ["pages per day", (c.esc / days).toFixed(0)], ["real threats auto-closed per day", (c.missed / days).toFixed(1)],
+                 ["expected cost per day", money(cost)]];
+  $("stats").innerHTML = stats.map(([k, v]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("");
+  $("msg").innerHTML = (c.rev / days > cap + 0.5 ? `<span class="warn">The review queue is over capacity: ${(c.rev / days).toFixed(0)} a day against ${cap}.</span> ` : "") + note;
+}
+document.querySelectorAll("input").forEach(e => e.addEventListener("input", update));
+update();
+</script>
+</body>
+</html>

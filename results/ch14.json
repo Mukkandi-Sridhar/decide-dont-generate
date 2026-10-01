@@ -1,0 +1,16 @@
+{
+  "difficulty": {
+    "all": 0.0714,
+    "easy": 0.005384724387133343,
+    "hard": 0.4252615844544096,
+    "n_easy": 7057,
+    "n_hard": 1338
+  },
+  "inj_act_after": 0.4975,
+  "inj_act_before": 0.1325,
+  "inj_act_trusted": 0.14,
+  "inj_median_after": 0.03122327933838005,
+  "inj_median_before": 0.34429670454250383,
+  "n_threats": 400,
+  "weak_retrieval": 0.66
+}

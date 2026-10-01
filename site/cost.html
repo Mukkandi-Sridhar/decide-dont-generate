@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision Cost Calculator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<nav><a href="index.html">Companion widgets</a> · Chapters 9, 12 and 16</nav>
+<div class="kicker">What do decisions cost?</div>
+<h1>Decision cost calculator</h1>
+<span class="tag">Jev price vendor-reported · LLM price and speed are illustrative assumptions · change them all</span>
+<p>Enter your own volumes and prices. The calculator compares answering every decision with an LLM against answering it with a decision model, and shows which decisions are worth making at each price (Chapter 12).</p>
+
+<div class="card controls ui">
+  <label>Decisions per day: <b id="nV"></b><input id="n" type="range" min="2" max="8" step="0.1" value="4"></label>
+  <label>Input tokens per decision: <b id="tV"></b><input id="t" type="range" min="50" max="3000" step="50" value="500"></label>
+  <label>LLM output tokens per decision: <b id="oV"></b><input id="o" type="range" min="1" max="400" step="1" value="40"></label>
+  <label>Decision model price, $ per M input tokens: <b id="jpV"></b><input id="jp" type="range" min="0.01" max="1" step="0.001" value="0.042"></label>
+  <label>LLM price, $ per M input: <b id="lpV"></b><input id="lp" type="range" min="0.05" max="15" step="0.05" value="1"></label>
+  <label>LLM price, $ per M output: <b id="loV"></b><input id="lo" type="range" min="0.1" max="60" step="0.1" value="4"></label>
+  <label>Value of a typical decision, $: <b id="vV"></b><input id="v" type="range" min="-6" max="1" step="0.1" value="-3"></label>
+</div>
+<div class="card">
+  <div class="stats" id="stats"></div>
+  <p class="note" id="worth"></p>
+</div>
+</main>
+<script src="data.js"></script>
+<script>
+const $ = id => document.getElementById(id), money = v => v >= 100 ? "$" + Math.round(v).toLocaleString() : "$" + v.toFixed(v >= 1 ? 2 : 4);
+function update() {
+  const n = Math.round(10 ** +$("n").value), t = +$("t").value, o = +$("o").value, jp = +$("jp").value,
+        lp = +$("lp").value, lo = +$("lo").value, val = 10 ** +$("v").value;
+  $("nV").textContent = n.toLocaleString(); $("tV").textContent = t; $("oV").textContent = o;
+  $("jpV").textContent = jp.toFixed(3); $("lpV").textContent = lp.toFixed(2); $("loV").textContent = lo.toFixed(1);
+  $("vV").textContent = money(val);
+  const jev = t * jp / 1e6, llm = (t * lp + o * lo) / 1e6;
+  const lat = 0.45 + o / 60;                                  // the book's illustrative LLM speed
+  $("stats").innerHTML = [["decision model, per day", money(n * jev)], ["LLM, per day", money(n * llm)],
+    ["decision model, per year", money(n * jev * 365)], ["LLM, per year", money(n * llm * 365)],
+    ["price ratio", (llm / jev).toFixed(0) + "×"], ["LLM time per decision", lat.toFixed(2) + " s"]]
+    .map(([k, v]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("");
+  const w = (p, name) => val > p ? `worth making with ${name}` : `<span class="warn">not worth making with ${name}</span>`;
+  $("worth").innerHTML = `A decision worth ${money(val)} is ${w(jev, "the decision model")} (it costs ${money(jev)}) and ${w(llm, "the LLM")} (it costs ${money(llm)}). Chapter 12: when price falls below value, decisions nobody used to make start being made.`;
+}
+document.querySelectorAll("input").forEach(e => e.addEventListener("input", update));
+update();
+</script>
+</body>
+</html>

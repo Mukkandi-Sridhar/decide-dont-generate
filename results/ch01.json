@@ -1,0 +1,23 @@
+{
+  "alert99_malicious": 0,
+  "attacks": 1515,
+  "base_rate": 0.07575,
+  "benign": 18485,
+  "best_caught": 73,
+  "best_false": 45,
+  "best_missed": 1442,
+  "best_mistakes": 1487,
+  "best_t": 0.9,
+  "bottom_bin_n": 7270,
+  "bottom_bin_rate": 0.022558459422283357,
+  "mid_bin_rate": 0.2220447284345048,
+  "mock_p_99": 0.68,
+  "n_alerts": 20000,
+  "never_flag_accuracy": 0.92425,
+  "never_flag_mistakes": 1515,
+  "per_day": 714.2857142857143,
+  "t05_false": 1287,
+  "t05_missed": 840,
+  "t05_mistakes": 2127,
+  "top_bin_rate": 0.6186440677966102
+}

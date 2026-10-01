@@ -1,0 +1,38 @@
+{
+  "camp_days": 7,
+  "camp_missed_base": 144.35321362757333,
+  "camp_missed_resp": 121.03480513885145,
+  "camp_peak_reviews": 289,
+  "capacity": 240,
+  "fifo_wait": 158.0,
+  "forecast_closed_expected": 4.563618884950086,
+  "forecast_closed_hist": 4.380952380952381,
+  "high": 0.34,
+  "low": 0.03134068683221891,
+  "new": {
+    "human_looks_per_day": 279.42857142857144,
+    "median_wait_threat_min": 15.0,
+    "p90_wait_threat_min": 15.0,
+    "threats_per_day": 58.857142857142854,
+    "threats_seen_share": 0.8907766990291263,
+    "threats_unseen_per_day": 6.428571428571429,
+    "threats_within_hour_share": 0.8349514563106796
+  },
+  "new_act_per_day": 431.57142857142856,
+  "new_esc_per_day": 43.714285714285715,
+  "new_review_per_day": 242.85714285714286,
+  "new_threats_closed_per_day": 6.142857142857143,
+  "old": {
+    "human_looks_per_day": 240.0,
+    "median_wait_threat_min": 5.0,
+    "p90_wait_threat_min": 1439.0,
+    "threats_per_day": 58.857142857142854,
+    "threats_seen_share": 0.5388349514563107,
+    "threats_unseen_per_day": 27.142857142857142,
+    "threats_within_hour_share": 0.3737864077669903
+  },
+  "old_flag_per_day": 240.0,
+  "old_threats_closed_per_day": 27.142857142857142,
+  "page_response_min": 15.0,
+  "prio_wait": 4.0
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calibration Playground</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<nav><a href="index.html">Companion widgets</a> · Chapters 3 and 11</nav>
+<div class="kicker">Is a 0.8 really an 80%?</div>
+<h1>Calibration playground</h1>
+<span class="tag">Synthetic: jev-mock-synthetic at two fictional companies</span>
+<p>The same mock model scores alerts at Kestrel and at Harbor Pharma, where real threats are rarer. Pick a company and a fix, and choose how many labelled alerts the fix may learn from. The reliability diagram is measured on the remaining alerts.</p>
+
+<div class="card controls ui">
+  <label>Company
+    <select id="co"><option value="live">Kestrel Logistics</option><option value="harbor">Harbor Pharma</option></select></label>
+  <label>Fix
+    <select id="fix"><option value="none">none (raw mock scores)</option><option value="temp">temperature (1 number)</option>
+      <option value="platt">Platt scaling (2 numbers)</option></select></label>
+  <label>Labels the fix learns from: <b id="nV"></b><input id="n" type="range" min="50" max="2000" step="50" value="300"></label>
+  <label>Random draw <b id="sV"></b><input id="s" type="range" min="1" max="20" step="1" value="1"></label>
+</div>
+
+<div class="card">
+  <svg id="rel" viewBox="0 0 520 380" role="img" aria-label="Reliability diagram"></svg>
+  <div class="stats" id="stats"></div>
+  <p class="note">Move the random draw with few labels: the fitted fix, and the measured error, jump around. That's Chapter 11's warning about small samples.</p>
+</div>
+<div class="tooltip" id="tip"></div>
+</main>
+<script src="data.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const logit = p => Math.log(Math.max(p, 1e-6) / Math.max(1 - p, 1e-6)), sig = z => 1 / (1 + Math.exp(-z));
+function rng(seed) { let s = seed * 2654435761 % 4294967296; return () => (s = (1664525 * s + 1013904223) % 4294967296) / 4294967296; }
+function fitPlatt(z, y, temperatureOnly) {
+  let a = 1, b = 0;
+  for (let it = 0; it < 200; it++) {                      // gradient descent on log loss
+    let ga = 0, gb = 0;
+    for (let i = 0; i < z.length; i++) { const e = sig(a * z[i] + b) - y[i]; ga += e * z[i]; gb += e; }
+    a -= 0.5 * ga / z.length; if (!temperatureOnly) b -= 0.5 * gb / z.length;
+  }
+  return p => sig(a * logit(p) + b);
+}
+function ece(p, y, bins = 10) {
+  const n = Array(bins).fill(0), sp = Array(bins).fill(0), sy = Array(bins).fill(0);
+  p.forEach((v, i) => { const k = Math.min(bins - 1, Math.floor(v * bins)); n[k]++; sp[k] += v; sy[k] += y[i]; });
+  let e = 0; const pts = [];
+  for (let k = 0; k < bins; k++) if (n[k]) { e += n[k] * Math.abs(sp[k] / n[k] - sy[k] / n[k]); if (n[k] >= 15) pts.push([sp[k] / n[k], sy[k] / n[k], n[k]]); }
+  return [e / p.length, pts];
+}
+function update() {
+  const src = window.BOOK_DATA[$("co").value], D = {p: src.p_raw || src.p, y: src.y}, N = +$("n").value, fix = $("fix").value, r = rng(+$("s").value);
+  $("nV").textContent = N; $("sV").textContent = $("s").value;
+  const idx = D.p.map((_, i) => i).sort(() => r() - 0.5), fitI = idx.slice(0, N), testI = idx.slice(N);
+  let f = p => p;
+  if (fix !== "none") f = fitPlatt(fitI.map(i => logit(D.p[i])), fitI.map(i => D.y[i]), fix === "temp");
+  const p = testI.map(i => f(D.p[i])), y = testI.map(i => D.y[i]);
+  const [e, pts] = ece(p, y);
+  const X = v => 50 + 440 * v / 0.7, Y = v => 340 - 310 * v / 0.7;
+  let s = `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(0.7)}" y2="${Y(0.7)}" stroke="var(--muted)" stroke-dasharray="4 3"></line>`;
+  for (const v of [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]) {
+    s += `<line x1="${X(v)}" y1="${Y(0)}" x2="${X(v)}" y2="${Y(0.7)}" stroke="var(--grid)"></line><text x="${X(v)}" y="358" text-anchor="middle">${Math.round(v * 100)}%</text>`;
+    s += `<line x1="${X(0)}" y1="${Y(v)}" x2="${X(0.7)}" y2="${Y(v)}" stroke="var(--grid)"></line><text x="${X(0) - 8}" y="${Y(v) + 4}" text-anchor="end">${Math.round(v * 100)}%</text>`;
+  }
+  s += `<text x="${X(0.35)}" y="376" text-anchor="middle">what the model said</text>`;
+  s += `<polyline fill="none" stroke="var(--jev)" stroke-width="2" points="${pts.map(q => X(Math.min(q[0], 0.7)) + "," + Y(Math.min(q[1], 0.7))).join(" ")}"></polyline>`;
+  s += pts.map(q => `<circle cx="${X(Math.min(q[0], 0.7))}" cy="${Y(Math.min(q[1], 0.7))}" r="6" fill="var(--jev)" stroke="var(--card)" stroke-width="2" data-t="said ${(q[0] * 100).toFixed(1)}%, happened ${(q[1] * 100).toFixed(1)}% (${q[2]} alerts)"></circle>`).join("");
+  $("rel").innerHTML = s;
+  const mean = a => a.reduce((x, v) => x + v, 0) / a.length;
+  $("stats").innerHTML = [["ECE on unseen alerts", e.toFixed(3)], ["average said", (mean(p) * 100).toFixed(1) + "%"],
+    ["share really threats", (mean(y) * 100).toFixed(1) + "%"], ["alerts measured", p.length]]
+    .map(([k, v]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("");
+  document.querySelectorAll("circle").forEach(c => {
+    c.addEventListener("mousemove", ev => { const t = $("tip"); t.style.display = "block"; t.style.left = ev.clientX + 12 + "px"; t.style.top = ev.clientY + 12 + "px"; t.textContent = c.dataset.t; });
+    c.addEventListener("mouseleave", () => $("tip").style.display = "none");
+  });
+}
+document.querySelectorAll("input,select").forEach(e => e.addEventListener("input", update));
+update();
+</script>
+</body>
+</html>
